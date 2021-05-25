@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Museart</string>
+    <string name="navigation_news">News</string>
+    <string name="navigation_scanner">Scanner</string>
+    <string name="navigation_gallery">Gallery</string>
+</resources>

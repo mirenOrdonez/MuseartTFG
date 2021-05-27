@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -28,6 +29,8 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.HashMap;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -58,6 +61,7 @@ public class ListadoActivity extends AppCompatActivity {
             try {
                 adaptador = new obraAdapter(getApplicationContext(), c);
                 lista.setAdapter(adaptador);
+
             } catch (Exception e) {
                 Log.d("error", e.getMessage());
             }
@@ -66,6 +70,17 @@ public class ListadoActivity extends AppCompatActivity {
         else {
             Log.d("ERROR", "listview");
         }
+        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int i, long l) {
+                Cursor cursorObra = (Cursor) lista.getItemAtPosition(i);
+                int id = cursorObra.getColumnIndexOrThrow("id");
+                //Log.d("id", String.valueOf(id));
+                startActivity(new Intent(getApplicationContext(), ObraActivity.class).putExtra("id", id));
+
+            }
+        });
     }
 
 
@@ -144,6 +159,7 @@ public class ListadoActivity extends AppCompatActivity {
         }
     }
 
+
 }
 
 class obraAdapter extends CursorAdapter {
@@ -180,4 +196,5 @@ class obraAdapter extends CursorAdapter {
             }
         });
     }
+
 }

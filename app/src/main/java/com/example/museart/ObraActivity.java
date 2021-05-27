@@ -2,8 +2,11 @@ package com.example.museart;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -18,14 +21,13 @@ public class ObraActivity extends AppCompatActivity {
     private Cursor c;
     private ImageView _imagen;
     private TextView _titulo, _artista, _annoNac, _lugarNac, _annoFal, _lugarFal, _publicado_en, _periodo, _descripcion, _dato_curioso;
-    private ProgressBar pb;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_obra);
-        _imagen = findViewById(R.id.urlimagen);
+        _imagen = findViewById(R.id.urlfoto);
         _titulo = findViewById(R.id.titulo);
         _artista = findViewById(R.id.artista);
         _annoNac = findViewById(R.id.annoNac);
@@ -38,24 +40,25 @@ public class ObraActivity extends AppCompatActivity {
         _dato_curioso = findViewById(R.id.dato_curioso);
 
         int id = getIntent().getExtras().getInt("id");
+        Log.d("id", String.valueOf(id));
 
         db = new DbManager(getApplicationContext());
 
-        c = db.getCursor("obras", "_id="+id);
+        c = db.getCursor("obras", "id =" +id);
         if (c.moveToFirst()) {
             do {
                 _titulo.setText(c.getString(c.getColumnIndexOrThrow("titulo")));
                 _artista.setText(c.getString(c.getColumnIndexOrThrow("artista")));
-                _annoNac.setText(c.getInt(c.getColumnIndexOrThrow("annoNac")));
-                _lugarNac.setText(c.getString(c.getColumnIndexOrThrow("titulo")));
-                _annoFal.setText(c.getInt(c.getColumnIndexOrThrow("annoFal")));
+                _annoNac.setText(c.getString(c.getColumnIndexOrThrow("annoNac")));
+                _lugarNac.setText(c.getString(c.getColumnIndexOrThrow("lugarNac")));
+                _annoFal.setText(c.getString(c.getColumnIndexOrThrow("annoFal")));
                 _lugarFal.setText(c.getString(c.getColumnIndexOrThrow("lugarFal")));
-                _publicado_en.setText(c.getInt(c.getColumnIndexOrThrow("publicado_en")));
+                _publicado_en.setText(c.getString(c.getColumnIndexOrThrow("publicado_en")));
                 _periodo.setText(c.getString(c.getColumnIndexOrThrow("periodo")));
                 _descripcion.setText(c.getString(c.getColumnIndexOrThrow("descripcion")));
                 _dato_curioso.setText(c.getString(c.getColumnIndexOrThrow("dato_curioso")));
 
-                Picasso.with(getApplicationContext()).load("http://192.168.64.2/MUSEART/img"+c.getString(c.getColumnIndexOrThrow("imagen")))
+                Picasso.with(getApplicationContext()).load("http://192.168.64.2/MUSEART/img/"+c.getString(c.getColumnIndexOrThrow("imagen")))
                         .into(_imagen, new Callback() {
                             @Override
                             public void onSuccess() {
@@ -67,9 +70,10 @@ public class ObraActivity extends AppCompatActivity {
 
                             }
                         });
-            } while (c.moveToFirst());
-
+            } while (c.moveToNext());
         }
 
     }
+
+
 }
